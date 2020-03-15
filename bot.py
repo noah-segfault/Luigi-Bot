@@ -12,7 +12,7 @@ from discord.ext import commands, tasks
 from discord.utils import get 
 from itertools import cycle
 
-TOKEN = 'Njg1OTQyNTA0Mzk0MTk1MDkz.XmwKNQ.4sFYVYI4attZM5XhXyKI-E5Y4g4'
+TOKEN = 'Njg1OTQyNTA0Mzk0MTk1MDkz.Xm2IGw.tLurRs5FzoFZJJ0q3V7U49gF0yE'
 players = {}
 client = commands.Bot(command_prefix = '!')
 status = [
@@ -121,6 +121,45 @@ async def _play(ctx, url: str):
     nname = name.rsplit("-", 2)
     await ctx.send(f"Playing: {nname}")
     print("Playing\n")
+
+@client.command(pass_context=True, aliases=['pa','pause'])
+async def _pause(ctx):
+
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_playing():
+        print("Music paused")
+        voice.pause()
+        await ctx.send("Music paused")
+    else:
+        print("Music not playing, pause failed")
+        await ctx.send("Music not playing")
+
+@client.command(pass_context=True, aliases=['r','resume'])
+async def _resume(ctx):
+
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_paused():
+        print("Music resume")
+        voice.resume()
+        await ctx.send("Music resume")
+    else:
+        print("Music playing, resume failed")
+        await ctx.send("Music currently playing")
+
+@client.command(pass_context=True, aliases=['s','stop'])
+async def _stop(ctx):
+
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_playing():
+        print("Music stopped")
+        voice.stop()
+        await ctx.send("Music stopped")
+    else:
+        print("Music not playing, stop failed")
+        await ctx.send("Music not playing, no stop occured")
 
 #Outputs an error message if command is invalid
 @client.event
